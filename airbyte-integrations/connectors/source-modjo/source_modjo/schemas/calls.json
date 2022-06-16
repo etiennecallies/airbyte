@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": ["integer"]
+    },
+    "ownerId": {
+      "type": ["integer"]
+    },
+    "defaultContactId": {
+      "type": ["integer"]
+    },
+    "name": {
+      "type": ["string"]
+    },
+    "date": {
+      "type": ["string"],
+      "format": "date-time"
+    },
+    "createdOn": {
+      "type": ["string"],
+      "format": "date-time"
+    },
+    "modifiedOn": {
+      "type": ["string"],
+      "format": "date-time"
+    },
+    "phoneProvider": {
+      "type": ["string"]
+    },
+    "externalPhoneProvider": {
+      "type": ["string"]
+    },
+    "phoneProviderCallId": {
+      "type": ["integer"]
+    },
+    "phoneProviderRecordingUrl": {
+      "type": ["string"]
+    },
+    "direction": {
+      "type": ["string"]
+    },
+    "duration": {
+      "type": ["number"]
+    },
+    "totalDuration": {
+      "type": ["integer"]
+    },
+    "mediaType": {
+      "type": ["string"]
+    },
+    "mediaFileS3Key": {
+      "type": ["string"]
+    },
+    "mediaUrl": {
+      "type": ["string"]
+    },
+    "transcriptionJobName": {
+      "type": ["string"]
+    },
+    "uuid": {
+      "type": ["string"]
+    },
+    "status": {
+      "type": ["string"]
+    },
+    "isPublic": {
+      "type": ["boolean"]
+    },
+    "wasTrimmed": {
+      "type": ["boolean"]
+    },
+    "userTalkRatio": {
+      "type": ["number"]
+    },
+    "totalComments": {
+      "type": ["integer"]
+    },
+    "full_count": {
+      "type": ["integer"]
+    },
+    "totalLiveNotesBlocks": {
+      "type": ["integer"]
+    },
+    "shareLink": {
+      "type": ["string"]
+    },
+    "thumbnailUrl": {
+      "type": ["boolean"]
+    },
+    "thumbnailHighResUrl": {
+      "type": ["boolean"]
+    },
+    "contacts": {
+      "type": ["array"],
+      "items": {
+        "$ref": "contacts.json"
+      }
+    },
+    "users": {
+      "type": ["array"],
+      "items": {
+        "$ref": "users.json"
+      }
+    },
+    "tags": {
+      "type": ["array"],
+      "items": {
+        "$ref": "calls_tags.json"
+      }
+    },
+    "transcripts": {
+      "type": ["array"],
+      "items": {
+        "$ref": "transcripts.json"
+      }
+    },
+    "speakers": {
+      "type": ["array"],
+      "items": {
+        "$ref": "speakers.json"
+      }
+    }
+  }
+}
