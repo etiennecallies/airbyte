@@ -1,16 +1,16 @@
 #
 # Copyright (c) 2022 Airbyte, Inc., all rights reserved.
 #
-import math
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Any, Iterable, Mapping, MutableMapping, Optional
 
 import requests
 from airbyte_cdk.sources.streams.http import HttpStream
+from airbyte_cdk.sources.streams import IncrementalMixin
 
 
 # Basic full refresh stream
-class AircallStream(HttpStream, ABC):
+class AircallStream(HttpStream):
     url_base = "https://api.aircall.io/v1/"
     per_page = 20
 
@@ -20,9 +20,9 @@ class AircallStream(HttpStream, ABC):
 
     primary_key = 'id'
 
-    def __init__(self, start_time: int, **kwargs):
+    def __init__(self, config: Mapping[str, Any], **kwargs):
         super().__init__(**kwargs)
-        self.start_time = start_time
+        self.start_time = config.get('start_time', 0)
         self.current_page = 0
 
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
@@ -77,7 +77,45 @@ class AircallStream(HttpStream, ABC):
         return 'created_at'
 
 
-class Calls(AircallStream):
+class AircallIncrementalStream(AircallStream, IncrementalMixin):
+    def __init__(self, config: Mapping[str, Any], **kwargs):
+        super().__init__(config, **kwargs)
+        self._cursor_value = None
+
+    @property
+    @abstractmethod
+    def data_field(self) -> str:
+        pass
+
+    @property
+    def cursor_field(self) -> str:
+        return self.creation_date_field
+
+    @property
+    def state(self) -> Mapping[str, Any]:
+        if self._cursor_value:
+            return {self.cursor_field: self._cursor_value}
+        else:
+            # In case of no results, we save the config start_time (0 by default)
+            return {self.cursor_field: self.start_time}
+
+    @state.setter
+    def state(self, value: Mapping[str, Any]):
+        self._cursor_value = value[self.cursor_field]
+        # We start fetching API from the most recent date of:
+        # - the latest state date (the latest record creation date)
+        # - the start date specified in config
+        self.start_time = max(self.start_time, self._cursor_value)
+
+    def read_records(self, *args, **kwargs) -> Iterable[Mapping[str, Any]]:
+        for record in super().read_records(*args, **kwargs):
+            if self._cursor_value:
+                latest_record_date = record[self.cursor_field]
+                self._cursor_value = max(self._cursor_value, latest_record_date)
+            yield record
+
+
+class Calls(AircallIncrementalStream):
     data_field = 'calls'
     creation_date_field = 'started_at'
 

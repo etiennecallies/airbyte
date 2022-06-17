@@ -43,4 +43,4 @@ class SourceAircall(AbstractSource):
 
     def streams(self, config: Mapping[str, Any]) -> List[Stream]:
         authenticator = AircallAuthenticator().get_auth(config)
-        return [Calls(config.get('start_time', 0), authenticator=authenticator)]
+        return [Calls(config, authenticator=authenticator)]
