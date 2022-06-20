@@ -7,15 +7,135 @@
         "integer"
       ]
     },
-    "direction": {
+    "direct_link": {
       "type": [
-        "string"
+        "string", "null"
       ]
     },
     "started_at": {
       "type": [
         "integer"
       ]
+    },
+    "answered_at": {
+      "type": [
+        "integer", "null"
+      ]
+    },
+    "ended_at": {
+      "type": [
+        "integer", "null"
+      ]
+    },
+    "duration": {
+      "type": [
+        "integer", "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string"
+      ]
+    },
+    "direction": {
+      "type": [
+        "string"
+      ]
+    },
+    "raw_digits": {
+      "type": [
+        "string"
+      ]
+    },
+    "asset": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "recording": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "voicemail": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "archived": {
+      "type": [
+        "boolean"
+      ]
+    },
+    "missed_call_reason": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "cost": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "number": {
+      "$ref": "numbers.json"
+    },
+    "user": {
+      "$ref": "users.json"
+    },
+    "contact_id": {
+      "$ref": "contacts.json"
+    },
+    "assigned_to": {
+      "$ref": "users.json"
+    },
+    "teams": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "teams.json"
+      }
+    },
+    "transferred_by": {
+      "$ref": "users.json"
+    },
+    "transferred_to": {
+      "$ref": "users.json"
+    },
+    "comments": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": [
+              "integer"
+            ]
+          },
+          "content": {
+            "type": ["null", "string"]
+          },
+          "posted_at": {
+            "type": [
+              "integer"
+            ]
+          },
+          "posted_by": {
+            "$ref": "users.json"
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "teams.json"
+      }
+    },
+    "participants": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "participants.json"
+      }
     }
   }
 }

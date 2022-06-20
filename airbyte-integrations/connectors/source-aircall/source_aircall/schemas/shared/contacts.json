@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "integer"
+      ]
+    },
+    "direct_link": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "first_name": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "last_name": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "company_name": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "information": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "is_shared": {
+      "type": [
+        "boolean"
+      ]
+    },
+    "phone_numbers": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": [
+              "integer"
+            ]
+          },
+          "label": {
+            "type": [
+              "string"
+            ]
+          },
+          "value": {
+            "type": [
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "emails": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": [
+              "integer"
+            ]
+          },
+          "label": {
+            "type": [
+              "string"
+            ]
+          },
+          "value": {
+            "type": [
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

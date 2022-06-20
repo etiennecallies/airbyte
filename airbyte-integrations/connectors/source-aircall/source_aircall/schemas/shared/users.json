@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "integer"
+      ]
+    },
+    "direct_link": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "integer"
+      ]
+    },
+    "available": {
+      "type": [
+        "boolean"
+      ]
+    },
+    "availability_status": {
+      "type": [
+        "string"
+      ]
+    },
+    "numbers": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "numbers.json"
+      }
+    },
+    "time_zone": {
+      "type": [
+        "string"
+      ]
+    },
+    "language": {
+      "type": [
+        "string"
+      ]
+    },
+    "wrap_up_time": {
+      "type": [
+        "integer", "null"
+      ]
+    }
+  }
+}

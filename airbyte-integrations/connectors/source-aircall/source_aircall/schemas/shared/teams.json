@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "integer"
+      ]
+    },
+    "direct_link": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string", "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "integer"
+      ]
+    },
+    "users": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "users.json"
+      }
+    }
+  }
+}
