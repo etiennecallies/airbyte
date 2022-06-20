@@ -1,6 +1,7 @@
 #
 # Copyright (c) 2022 Airbyte, Inc., all rights reserved.
 #
+from datetime import datetime
 from abc import abstractmethod
 from typing import Any, Iterable, Mapping, MutableMapping, Optional
 
@@ -75,6 +76,21 @@ class AircallStream(HttpStream):
         and define a cursor field.
         """
         return 'created_at'
+
+    def backoff_time(self, response: requests.Response) -> Optional[float]:
+        """This method is called if we run into the rate limit.
+        Aircall puts the retry time in the `Retry-After` response header so we
+        return that value. If the response is anything other than a 429 (e.g: 5XX)
+        fall back on default retry behavior.
+        Rate Limits Docs: https://developer.aircall.io/api-references/#rate-limiting"""
+
+        if "x-aircallapi-reset" in response.headers:
+            current_timestamp = int(datetime.now().timestamp())
+            reset_timestamp = int(response.headers["x-aircallapi-reset"])
+            return max(reset_timestamp - current_timestamp + 1, 1)
+        else:
+            self.logger.info("x-aircallapi-reset header not found. Using default backoff value")
+            return 5
 
 
 class AircallIncrementalStream(AircallStream, IncrementalMixin):

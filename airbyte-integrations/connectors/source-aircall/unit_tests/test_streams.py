@@ -1,7 +1,7 @@
 #
 # Copyright (c) 2022 Airbyte, Inc., all rights reserved.
 #
-
+from datetime import datetime
 from http import HTTPStatus
 from unittest.mock import MagicMock
 
@@ -78,6 +78,7 @@ def test_should_retry(patch_base_class, http_status, should_retry):
 
 def test_backoff_time(patch_base_class):
     response_mock = MagicMock()
+    response_mock.headers = {'x-aircallapi-reset': datetime.now().timestamp() + 20}
     stream = AircallStream({})
-    expected_backoff_time = None
+    expected_backoff_time = 21
     assert stream.backoff_time(response_mock) == expected_backoff_time
