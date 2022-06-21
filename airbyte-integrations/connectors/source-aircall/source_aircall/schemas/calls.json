@@ -128,7 +128,7 @@
     "tags": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "teams.json"
+        "$ref": "tags.json"
       }
     },
     "participants": {
