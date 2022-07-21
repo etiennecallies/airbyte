@@ -18,3 +18,7 @@ connectionSpecification:
       type: integer
       description: 'Start time in timestamp integer format. Any data before this timestamp will not be replicated.'
       examples: [1655206928]
+    delay:
+      type: integer
+      description: 'Optionally, you can prevent recent data from being fetched. Enter a delay from creation time in seconds, this will exclude data from delay until now. In case of calls data, it can let calls to end before fetching them.'
+      examples: [3600]

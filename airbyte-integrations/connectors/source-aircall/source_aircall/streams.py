@@ -3,6 +3,7 @@
 #
 from datetime import datetime
 from abc import abstractmethod
+from time import time
 from typing import Any, Iterable, Mapping, MutableMapping, Optional
 
 import requests
@@ -24,6 +25,7 @@ class AircallStream(HttpStream):
     def __init__(self, config: Mapping[str, Any], **kwargs):
         super().__init__(**kwargs)
         self.start_time = config.get('start_time', 0)
+        self.delay = config.get('delay', 0)
         self.current_page = 0
 
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
@@ -53,6 +55,9 @@ class AircallStream(HttpStream):
     ) -> MutableMapping[str, Any]:
 
         params = {"from": self.start_time, "per_page": self.per_page}
+
+        if self.delay:
+            params['to'] = int(time()) - self.delay
 
         # Handle pagination by inserting the next page's token in the request parameters
         if next_page_token:
