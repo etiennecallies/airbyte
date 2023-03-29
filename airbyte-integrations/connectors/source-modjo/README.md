@@ -130,3 +130,17 @@ You've checked out the repo, implemented a million dollar feature, and you're re
 1. Create a Pull Request.
 1. Pat yourself on the back for being an awesome contributor.
 1. Someone from Airbyte will take a look at your PR and iterate with you to merge it into master.
+
+
+## Deploy on Dockerhub
+
+We use account `etiennecalliesouihelp`, but this can be replaced by whatever account.
+Get latest tag on https://hub.docker.com/r/etiennecalliesouihelp/modjo-source-aircall/tags.
+```shell
+docker build --platform linux/amd64 . -t airbyte/source-modjo:new-tag
+docker tag airbyte/source-modjo:new-tag etiennecalliesouihelp/airbyte-source-modjo:new-tag
+docker login # if not already logged
+docker push etiennecalliesouihelp/airbyte-source-modjo:new-tag
+```
+
+Alternatively, you can create a github action by looking at this [example](https://github.com/b4stien/airbyte/blob/bg/source-amplitude-oh/.github/workflows/build-and-push-docker.yml).
