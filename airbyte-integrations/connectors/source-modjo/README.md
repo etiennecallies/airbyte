@@ -135,7 +135,7 @@ You've checked out the repo, implemented a million dollar feature, and you're re
 ## Deploy on Dockerhub
 
 We use account `etiennecalliesouihelp`, but this can be replaced by whatever account.
-Get latest tag on https://hub.docker.com/r/etiennecalliesouihelp/modjo-source-aircall/tags.
+Get latest tag on https://hub.docker.com/r/etiennecalliesouihelp/airbyte-source-modjo/tags.
 ```shell
 docker build --platform linux/amd64 . -t airbyte/source-modjo:new-tag
 docker tag airbyte/source-modjo:new-tag etiennecalliesouihelp/airbyte-source-modjo:new-tag

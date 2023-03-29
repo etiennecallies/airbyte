@@ -18,6 +18,54 @@
     "duration": {
       "type": ["number"]
     },
+    "mediaType": {
+      "type": ["string"]
+    },
+    "uuid": {
+      "type": ["string"]
+    },
+    "isPublic": {
+      "type": ["boolean"]
+    },
+    "userTalkRatio": {
+      "type": ["number"]
+    },
+    "totalComments": {
+      "type": ["integer"]
+    },
+    "full_count": {
+      "type": ["integer"]
+    },
+    "totalLiveNotesBlocks": {
+      "type": ["integer"]
+    },
+    "shareLink": {
+      "type": ["string"]
+    },
+    "thumbnailUrl": {
+      "type": ["boolean"]
+    },
+    "thumbnailHighResUrl": {
+      "type": ["boolean"]
+    },
+    "contacts": {
+      "type": ["array"],
+      "items": {
+        "$ref": "contacts.json"
+      }
+    },
+    "users": {
+      "type": ["array"],
+      "items": {
+        "$ref": "users.json"
+      }
+    },
+    "tags": {
+      "type": ["array"],
+      "items": {
+        "$ref": "tags.json"
+      }
+    },
     "transcript": {
       "type": ["string"]
     }
