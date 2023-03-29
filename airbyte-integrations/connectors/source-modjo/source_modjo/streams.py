@@ -1,28 +1,34 @@
 #
 # Copyright (c) 2022 Airbyte, Inc., all rights reserved.
 #
+from datetime import datetime, timedelta
 from typing import Any, Iterable, Mapping, MutableMapping, Optional
 
 import requests
 from airbyte_cdk.sources.streams.http import HttpStream
+from airbyte_cdk.sources.streams import IncrementalMixin
 from source_modjo.authenticator import ModjoOauth2
 
 
 # Basic full refresh stream
-class Calls(HttpStream):
+class Calls(HttpStream, IncrementalMixin):
     url_base = "https://api.modjo.ai/"
-    per_page = 20
+    per_page = 100
 
     primary_key = 'id'
     data_field = 'values'
-
-    def path(self, **kwargs):
-        return 'calls/list'
+    cursor_field = 'date'
 
     def __init__(self, authenticator: ModjoOauth2):
         super().__init__(authenticator)
         self.current_page = 1
         self._authenticator = authenticator
+        self._cursor_value = None
+        self.start_date = None
+        self.end_date = (datetime.utcnow() - timedelta(hours=2)).strftime('%Y-%m-%dT%H:%M:%S.000Z')
+
+    def path(self, **kwargs):
+        return 'calls/list'
 
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
         decoded_response = response.json()
@@ -45,9 +51,14 @@ class Calls(HttpStream):
 
         params = {"perPage": self.per_page}
 
+        if self.start_date:
+            params['startDate'] = self.start_date
+            params['endDate'] = self.end_date
+
         # Handle pagination by inserting the next page's token in the request parameters
         if next_page_token:
             params.update(next_page_token)
+
         return params
 
     def parse_response(self, response: requests.Response, **kwargs) -> Iterable[Mapping]:
@@ -61,5 +72,18 @@ class Calls(HttpStream):
             sub_response = requests.get(transcript_url, headers=self._authenticator.get_auth_header())
             record['transcript'] = str(sub_response.text)
 
+            # set state
+            if self._cursor_value:
+                self._cursor_value = max(self._cursor_value, record[self.cursor_field])
+
             yield record
+
+    @property
+    def state(self) -> MutableMapping[str, Any]:
+        return {self.cursor_field: self._cursor_value}
+
+    @state.setter
+    def state(self, value: Mapping[str, Any]):
+        self._cursor_value = value[self.cursor_field]
+        self.start_date = self._cursor_value
 
