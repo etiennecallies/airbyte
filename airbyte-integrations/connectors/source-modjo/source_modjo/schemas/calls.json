@@ -17,6 +17,9 @@
     },
     "duration": {
       "type": ["number"]
+    },
+    "transcript": {
+      "type": ["string"]
     }
   }
 }
