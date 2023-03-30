@@ -14,7 +14,9 @@ class ModjoOauth2(AuthBase):
     Generates OAuth2.0 access tokens from an OAuth2.0 refresh token and client credentials.
     The generated access token is attached to each request via the Authorization header.
     """
-    MODJO_TOKEN_DURATION = 15 * 60
+
+    # Access token are valid for 15 minutes but we set it to 14 minutes here for safety
+    MODJO_TOKEN_DURATION = 14 * 60
 
     def __init__(
         self,
@@ -74,6 +76,7 @@ class ModjoAuthenticator:
         })
         response_data = response.json()
 
+        # Refresh token is valid for 30 days
         auth = ModjoOauth2(response_data['refreshToken'])
 
         return auth
