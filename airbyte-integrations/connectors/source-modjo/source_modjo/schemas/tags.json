@@ -5,14 +5,14 @@
     "id": {
       "type": ["integer"]
     },
+    "phoneProviderTagId": {
+      "type": ["integer"]
+    },
+    "phoneProvider": {
+      "type": ["string"]
+    },
     "name": {
       "type": ["string"]
-    },
-    "phoneNumber": {
-      "type": ["string"]
-    },
-    "email": {
-      "type": ["string", "null"]
     }
   }
 }

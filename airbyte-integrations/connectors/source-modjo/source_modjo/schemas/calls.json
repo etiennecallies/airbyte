@@ -5,6 +5,9 @@
     "id": {
       "type": ["integer"]
     },
+    "ownerId": {
+      "type": ["integer"]
+    },
     "name": {
       "type": ["string"]
     },
@@ -15,13 +18,31 @@
     "phoneProvider": {
       "type": ["string"]
     },
+    "phoneProviderRecordingUrl": {
+      "type": ["string"]
+    },
     "duration": {
       "type": ["number"]
+    },
+    "totalDuration": {
+      "type": ["integer"]
     },
     "mediaType": {
       "type": ["string"]
     },
+    "mediaFileS3Key": {
+      "type": ["string"]
+    },
+    "mediaUrl": {
+      "type": ["string"]
+    },
+    "transcriptionJobName": {
+      "type": ["string"]
+    },
     "uuid": {
+      "type": ["string"]
+    },
+    "status": {
       "type": ["string"]
     },
     "isPublic": {
@@ -63,11 +84,20 @@
     "tags": {
       "type": ["array"],
       "items": {
-        "$ref": "tags.json"
+        "$ref": "calls_tags.json"
       }
     },
-    "transcript": {
-      "type": ["string"]
+    "transcripts": {
+      "type": ["array"],
+      "items": {
+        "$ref": "transcripts.json"
+      }
+    },
+    "speakers": {
+      "type": ["array"],
+      "items": {
+        "$ref": "speakers.json"
+      }
     }
   }
 }

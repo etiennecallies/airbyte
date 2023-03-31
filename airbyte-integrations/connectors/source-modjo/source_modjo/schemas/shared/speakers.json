@@ -5,14 +5,11 @@
     "id": {
       "type": ["integer"]
     },
-    "name": {
-      "type": ["string"]
+    "userId": {
+      "type": ["integer", "null"]
     },
-    "phoneNumber": {
-      "type": ["string"]
-    },
-    "email": {
-      "type": ["string", "null"]
+    "contactId": {
+      "type": ["integer", "null"]
     }
   }
 }

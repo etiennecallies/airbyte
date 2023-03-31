@@ -8,11 +8,14 @@
     "name": {
       "type": ["string"]
     },
-    "phoneNumber": {
+    "slug": {
       "type": ["string"]
     },
-    "email": {
+    "saidBy": {
       "type": ["string", "null"]
+    },
+    "keywordsMap": {
+      "type": ["object"]
     }
   }
 }
