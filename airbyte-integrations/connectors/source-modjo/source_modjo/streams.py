@@ -97,6 +97,10 @@ class Calls(HttpStream, IncrementalMixin):
             ]:
                 record[key] = details[key]
 
+            # If we want topicIds in transcripts to be filled, we have to call another endpoint
+            # https://api.modjo.ai/transcription-blocks?callIds[]={record_id}
+            # Not implemented yet
+
             # set state
             if self._cursor_value:
                 self._cursor_value = max(self._cursor_value, record[self.cursor_field])
