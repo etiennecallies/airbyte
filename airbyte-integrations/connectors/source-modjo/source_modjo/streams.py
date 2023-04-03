@@ -1,7 +1,6 @@
 #
 # Copyright (c) 2022 Airbyte, Inc., all rights reserved.
 #
-from abc import abstractmethod
 from datetime import datetime, timedelta
 from typing import Any, Iterable, Mapping, MutableMapping, Optional
 
@@ -55,7 +54,9 @@ class Calls(HttpStream, IncrementalMixin):
 
         if self.start_date:
             params['startDate'] = self.start_date
-            params['endDate'] = self.end_date
+        else:
+            params['startDate'] = "2000-01-01T00:00:00.000Z"
+        params['endDate'] = self.end_date
 
         # Handle pagination by inserting the next page's token in the request parameters
         if next_page_token:
@@ -104,6 +105,8 @@ class Calls(HttpStream, IncrementalMixin):
             # set state
             if self._cursor_value:
                 self._cursor_value = max(self._cursor_value, record[self.cursor_field])
+            else:
+                self._cursor_value = record[self.cursor_field]
 
             yield record
 
