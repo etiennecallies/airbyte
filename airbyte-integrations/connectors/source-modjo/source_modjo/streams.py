@@ -85,14 +85,24 @@ class Calls(HttpStream, IncrementalMixin):
 
             # complete record with details
             for key in [
+                # already existing in /calls/list but more detailed in /call-details
                 'contacts',
-                'totalDuration',
-                'status',
+
+                # new fields
+                'createdOn',
+                'modifiedOn',
+                'externalPhoneProvider',
+                'phoneProviderCallId',
                 'phoneProviderRecordingUrl',
-                'transcriptionJobName',
                 'mediaUrl',
                 'mediaFileS3Key',
+                'status',
+                'direction',
+                'totalDuration',
+                'wasTrimmed',
                 'ownerId',
+                'defaultContactId',
+                'transcriptionJobName',
                 'transcripts',
                 'speakers',
             ]:

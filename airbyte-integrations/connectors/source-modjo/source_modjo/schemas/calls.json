@@ -8,6 +8,9 @@
     "ownerId": {
       "type": ["integer"]
     },
+    "defaultContactId": {
+      "type": ["integer"]
+    },
     "name": {
       "type": ["string"]
     },
@@ -15,10 +18,27 @@
       "type": ["string"],
       "format": "date-time"
     },
+    "createdOn": {
+      "type": ["string"],
+      "format": "date-time"
+    },
+    "modifiedOn": {
+      "type": ["string"],
+      "format": "date-time"
+    },
     "phoneProvider": {
       "type": ["string"]
     },
+    "externalPhoneProvider": {
+      "type": ["string"]
+    },
+    "phoneProviderCallId": {
+      "type": ["integer"]
+    },
     "phoneProviderRecordingUrl": {
+      "type": ["string"]
+    },
+    "direction": {
       "type": ["string"]
     },
     "duration": {
@@ -46,6 +66,9 @@
       "type": ["string"]
     },
     "isPublic": {
+      "type": ["boolean"]
+    },
+    "wasTrimmed": {
       "type": ["boolean"]
     },
     "userTalkRatio": {

@@ -137,10 +137,11 @@ You've checked out the repo, implemented a million dollar feature, and you're re
 We use account `etiennecalliesouihelp`, but this can be replaced by whatever account.
 Get latest tag on https://hub.docker.com/r/etiennecalliesouihelp/airbyte-source-modjo/tags.
 ```shell
-docker build --platform linux/amd64 . -t airbyte/source-modjo:new-tag
-docker tag airbyte/source-modjo:new-tag etiennecalliesouihelp/airbyte-source-modjo:new-tag
+cd airbyte-integrations/connectors/source-modjo/
+docker build --platform linux/amd64 . -t airbyte/source-modjo:{new-tag}
+docker tag airbyte/source-modjo:{new-tag} etiennecalliesouihelp/airbyte-source-modjo:{new-tag}
 docker login # if not already logged
-docker push etiennecalliesouihelp/airbyte-source-modjo:new-tag
+docker push etiennecalliesouihelp/airbyte-source-modjo:{new-tag}
 ```
 
 Alternatively, you can create a github action by looking at this [example](https://github.com/b4stien/airbyte/blob/bg/source-amplitude-oh/.github/workflows/build-and-push-docker.yml).
