@@ -37,7 +37,7 @@ class Calls(HttpStream, IncrementalMixin):
         if pagination["page"] == pagination["lastPage"]:
             return None
 
-        return {"page": pagination["next_page"]}
+        return {"page": pagination["nextPage"]}
 
     def request_body_json(
         self,
