@@ -14,59 +14,57 @@ from source_modjo.authenticator import ModjoOauth2
 # Incremental stream
 class Calls(HttpStream, IncrementalMixin):
     url_base = "https://api.modjo.ai/"
+    http_method = "POST"
     per_page = 100
 
     primary_key = 'id'
-    data_field = 'values'
     cursor_field = 'date'
 
     def __init__(self, authenticator: ModjoOauth2):
         super().__init__(authenticator)
-        self.current_page = 1
         self._authenticator = authenticator
         self._cursor_value = None
         self.start_date = None
         self.end_date = (datetime.utcnow() - timedelta(hours=2)).strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
     def path(self, **kwargs):
-        return 'calls/list'
+        return 'calls/search'
 
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
         decoded_response = response.json()
-        api_data = decoded_response[self.data_field]
+        pagination = decoded_response["pagination"]
 
-        if len(api_data) < self.per_page:
-            self.current_page = 1
+        if pagination["page"] == pagination["last_page"]:
             return None
 
-        self.current_page += 1
+        return {"page": pagination["next_page"]}
 
-        return {"page": self.current_page}
-
-    def request_params(
+    def request_body_json(
         self,
         stream_state: Mapping[str, Any],
         stream_slice: Mapping[str, Any] = None,
         next_page_token: Mapping[str, Any] = None,
     ) -> MutableMapping[str, Any]:
 
-        params = {"perPage": self.per_page}
+        params = {"pagination": {"perPage": self.per_page}, "filters": {}}
 
         if self.start_date:
-            params['startDate'] = self.start_date
+            params["filters"]['startDate'] = self.start_date
         else:
-            params['startDate'] = "2000-01-01T00:00:00.000Z"
-        params['endDate'] = self.end_date
+            params["filters"]['startDate'] = "2000-01-01T00:00:00.000Z"
+        params["filters"]['endDate'] = self.end_date
 
         # Handle pagination by inserting the next page's token in the request parameters
         if next_page_token:
-            params.update(next_page_token)
+            params["pagination"].update(next_page_token)
+        else:
+            params["pagination"].update({"page": 1})
 
         return params
 
     def parse_response(self, response: requests.Response, **kwargs) -> Iterable[Mapping]:
         response_json = response.json()
-        records = response_json[self.data_field]
+        records = response_json['values']
 
         for record in records:
             # Download transcript for each call
