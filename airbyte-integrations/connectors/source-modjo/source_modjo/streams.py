@@ -67,7 +67,7 @@ class Calls(HttpStream, IncrementalMixin):
         records = response_json['values']
 
         for record in records:
-            # Download transcript for each call
+            # Download details for each call
             record_id = record['id']
             details_url = f'https://api.modjo.ai/call-details/{record_id}'
             details_response = requests.get(details_url, headers=self._authenticator.get_auth_header())
@@ -101,14 +101,22 @@ class Calls(HttpStream, IncrementalMixin):
                 'ownerId',
                 'defaultContactId',
                 'transcriptionJobName',
-                'transcripts',
                 'speakers',
             ]:
                 record[key] = details[key]
 
-            # If we want topicIds in transcripts to be filled, we have to call another endpoint
-            # https://api.modjo.ai/transcription-blocks?callIds[]={record_id}
-            # Not implemented yet
+            # Download transcripts for each call
+            transcripts_url = f'https://api.modjo.ai/transcripts?callIds[]={record_id}'
+            transcripts_response = requests.get(transcripts_url, headers=self._authenticator.get_auth_header())
+
+            # raise and log exception if failure
+            try:
+                transcripts_response.raise_for_status()
+            except requests.HTTPError as exc:
+                self.logger.error(response.text)
+                raise exc
+
+            record['transcripts'] = transcripts_response.json()
 
             # set state
             if self._cursor_value:
