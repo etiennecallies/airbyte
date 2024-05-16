@@ -273,7 +273,6 @@ definitions:
             type:
               - "null"
               - object
-
   candidates_stream:
     $ref: "#/definitions/base_incremental_stream"
     $parameters:
