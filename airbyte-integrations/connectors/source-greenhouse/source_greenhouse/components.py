@@ -18,7 +18,7 @@ class GreenHouseSlicer(Cursor):
     cursor_field: str
     request_cursor_field: str
 
-    START_DATETIME: ClassVar[str] = "1970-01-01T00:00:00.000Z"
+    START_DATETIME: ClassVar[str] = "2024-01-01T00:00:00.000Z"
     DATETIME_FORMAT: ClassVar[str] = "%Y-%m-%dT%H:%M:%S.%fZ"
 
     def __post_init__(self, parameters: Mapping[str, Any]):
