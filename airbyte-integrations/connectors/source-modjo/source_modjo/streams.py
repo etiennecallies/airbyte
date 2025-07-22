@@ -143,8 +143,9 @@ class Calls(HttpStream, IncrementalMixin):
 
     @state.setter
     def state(self, value: Mapping[str, Any]):
-        self._cursor_value = value[self.cursor_field]
-        self.start_date = self._cursor_value
+        if self.cursor_field in value:
+            self._cursor_value = value[self.cursor_field]
+            self.start_date = self._cursor_value
 
 
 # Basic full refresh stream
