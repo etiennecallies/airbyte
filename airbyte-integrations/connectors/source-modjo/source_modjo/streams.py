@@ -63,7 +63,17 @@ class Calls(HttpStream, IncrementalMixin):
 
         return params
 
-    def get_call_details(self, record_id: int, max_attempt=3) -> dict:
+    @staticmethod
+    def get_exponential_backoff_time(max_attempt: int) -> int:
+        if max_attempt == 5:
+            return 1
+        if max_attempt == 4:
+            return 5
+        if max_attempt == 3:
+            return 50
+        return 500
+
+    def get_call_details(self, record_id: int, max_attempt=5) -> dict:
         details_url = f'https://api.modjo.ai/call-details/{record_id}'
         details_response = requests.get(details_url, headers=self._authenticator.get_auth_header())
 
@@ -73,8 +83,9 @@ class Calls(HttpStream, IncrementalMixin):
         except requests.HTTPError as exc:
             self.logger.warning(f"Failed to fetch details for call ID {record_id}: {exc}")
             if max_attempt > 1:
-                self.logger.info(f"Retrying... ({max_attempt - 1} attempts left)")
-                time.sleep(1)  # Wait before retrying
+                backoff_time = self.get_exponential_backoff_time(max_attempt)
+                self.logger.info(f"Retrying after {backoff_time} seconds... ({max_attempt - 1} attempts left)")
+                time.sleep(backoff_time)
                 return self.get_call_details(record_id, max_attempt - 1)
 
             self.logger.error("Max attempts reached. Unable to fetch call details.")
