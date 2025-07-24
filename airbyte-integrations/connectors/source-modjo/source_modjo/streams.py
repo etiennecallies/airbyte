@@ -73,26 +73,25 @@ class Calls(HttpStream, IncrementalMixin):
             return 50
         return 500
 
-    def get_call_details(self, record_id: int, max_attempt=5) -> dict:
-        details_url = f'https://api.modjo.ai/call-details/{record_id}'
-        details_response = requests.get(details_url, headers=self._authenticator.get_auth_header())
+    def call_modjo_api_with_retry(self, api_url: str, max_attempt=5) -> dict:
+        api_response = requests.get(api_url, headers=self._authenticator.get_auth_header())
 
         # raise and log exception if failure
         try:
-            details_response.raise_for_status()
+            api_response.raise_for_status()
         except requests.HTTPError as exc:
-            self.logger.warning(f"Failed to fetch details for call ID {record_id}: {exc}")
+            self.logger.warning(f"Failed to fetch details for api_url {api_url}: {exc}")
             if max_attempt > 1:
                 backoff_time = self.get_exponential_backoff_time(max_attempt)
                 self.logger.info(f"Retrying after {backoff_time} seconds... ({max_attempt - 1} attempts left)")
                 time.sleep(backoff_time)
-                return self.get_call_details(record_id, max_attempt - 1)
+                return self.call_modjo_api_with_retry(api_url, max_attempt - 1)
 
-            self.logger.error("Max attempts reached. Unable to fetch call details.")
-            self.logger.error(details_response.text)
+            self.logger.error(f"Max attempts reached. Unable to fetch api_url {api_url}.")
+            self.logger.error(api_response.text)
             raise exc
 
-        return details_response.json()
+        return api_response.json()
 
     def parse_response(self, response: requests.Response, **kwargs) -> Iterable[Mapping]:
         response_json = response.json()
@@ -101,7 +100,8 @@ class Calls(HttpStream, IncrementalMixin):
         for record in records:
             # Download details for each call
             record_id = record['id']
-            details = self.get_call_details(record_id)
+            details_url = f'https://api.modjo.ai/call-details/{record_id}'
+            details = self.call_modjo_api_with_retry(details_url)
 
             # complete record with details
             for key in [
@@ -129,16 +129,7 @@ class Calls(HttpStream, IncrementalMixin):
 
             # Download transcripts for each call
             transcripts_url = f'https://api.modjo.ai/transcripts?callIds[]={record_id}'
-            transcripts_response = requests.get(transcripts_url, headers=self._authenticator.get_auth_header())
-
-            # raise and log exception if failure
-            try:
-                transcripts_response.raise_for_status()
-            except requests.HTTPError as exc:
-                self.logger.error(response.text)
-                raise exc
-
-            record['transcripts'] = transcripts_response.json()
+            record['transcripts'] = self.call_modjo_api_with_retry(transcripts_url)
 
             # set state
             if self._cursor_value:
