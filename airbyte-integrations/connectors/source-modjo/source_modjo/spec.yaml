@@ -14,3 +14,7 @@ connectionSpecification:
     password:
       type: string
       description: 'Password of the account to use for authentication'
+    start_date:
+      type: string
+      format: date-time
+      description: 'The start date for data extraction in ISO 8601 format. Example: "2023-01-01T00:00:00Z"'

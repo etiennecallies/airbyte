@@ -27,7 +27,7 @@ class SourceModjo(AbstractSource):
         authenticator = ModjoAuthenticator().get_auth(config)
 
         return [
-            Calls(authenticator=authenticator),
+            Calls(authenticator=authenticator, config=config),
             Tags(authenticator=authenticator),
             Topics(authenticator=authenticator),
         ]

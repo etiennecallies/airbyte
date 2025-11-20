@@ -21,11 +21,11 @@ class Calls(HttpStream, IncrementalMixin):
     primary_key = 'id'
     cursor_field = 'date'
 
-    def __init__(self, authenticator: ModjoOauth2):
+    def __init__(self, authenticator: ModjoOauth2, config: Mapping[str, Any]):
         super().__init__(authenticator)
         self._authenticator = authenticator
         self._cursor_value = None
-        self.start_date = None
+        self.start_date = config.get('start_date', None)
         self.end_date = (datetime.utcnow() - timedelta(hours=2)).strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
     def path(self, **kwargs):
