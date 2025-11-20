@@ -3590,6 +3590,7 @@ spec:
     type: object
     required:
       - api_key
+      - start_date
     additionalProperties: true
     properties:
       api_key:
@@ -3601,3 +3602,11 @@ spec:
           for more information on how to generate this key.
         airbyte_secret: true
         order: 0
+      start_date:
+        title: Start Date
+        type: string
+        format: date-time
+        description: >-
+          The date from which incremental syncs will start. Must be in RFC 3339
+          format (e.g., "2023-01-01T00:00:00Z").
+        order: 1

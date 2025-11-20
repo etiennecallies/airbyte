@@ -17,15 +17,16 @@ class GreenHouseSlicer(Cursor):
     parameters: InitVar[Mapping[str, Any]]
     cursor_field: str
     request_cursor_field: str
+    config: InitVar[Mapping[str, Any]]
 
-    START_DATETIME: ClassVar[str] = "2024-01-01T00:00:00.000Z"
     DATETIME_FORMAT: ClassVar[str] = "%Y-%m-%dT%H:%M:%S.%fZ"
 
-    def __post_init__(self, parameters: Mapping[str, Any]):
+    def __post_init__(self, parameters: Mapping[str, Any], config: Mapping[str, Any]) -> None:
         self._state = {}
+        self.start_date = config.get("start_date")
 
     def stream_slices(self) -> Iterable[StreamSlice]:
-        yield StreamSlice(partition={}, cursor_slice={self.request_cursor_field: self._state.get(self.cursor_field, self.START_DATETIME)})
+        yield StreamSlice(partition={}, cursor_slice={self.request_cursor_field: self._state.get(self.cursor_field, self.start_date)})
 
     def _max_dt_str(self, *args: str) -> Optional[str]:
         new_state_candidates = list(map(lambda x: datetime.datetime.strptime(x, self.DATETIME_FORMAT), filter(None, args)))
@@ -112,7 +113,7 @@ class GreenHouseSubstreamSlicer(GreenHouseSlicer):
 
                 partition = {self.stream_slice_field: parent_primary_key}
                 cursor_slice = {
-                    self.request_cursor_field: self._state.get(str(parent_primary_key), {}).get(self.cursor_field, self.START_DATETIME)
+                    self.request_cursor_field: self._state.get(str(parent_primary_key), {}).get(self.cursor_field, self.start_date)
                 }
 
                 yield StreamSlice(partition=partition, cursor_slice=cursor_slice)
