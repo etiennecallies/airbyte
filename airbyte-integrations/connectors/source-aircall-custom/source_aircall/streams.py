@@ -133,7 +133,7 @@ class AircallIncrementalStream(AircallStream, IncrementalMixin):
 
     def read_records(self, *args, **kwargs) -> Iterable[Mapping[str, Any]]:
         for record in super().read_records(*args, **kwargs):
-            if self._cursor_value:
+            if self._cursor_value is not None:
                 latest_record_date = record[self.cursor_field]
                 self._cursor_value = max(self._cursor_value, latest_record_date)
             yield record
