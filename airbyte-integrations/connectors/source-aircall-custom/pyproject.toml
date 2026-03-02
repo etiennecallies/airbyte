@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "source-aircall-custom"
+version = "0.1.0"
+description = "Source CDK implementation for Aircall."
+authors = ["Etienne Callies <etienne.callies@ouihelp.fr>"]
+readme = "README.md"
+
+[[tool.poetry.packages]]
+include = "source_aircall"
+
+[tool.poetry.scripts]
+source-aircall-custom = "source_aircall.run:run"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+airbyte-cdk = ">=7.10.1,<8.0.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

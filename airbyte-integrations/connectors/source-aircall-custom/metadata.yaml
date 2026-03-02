@@ -1,0 +1,33 @@
+data:
+  connectorSubtype: api
+  connectorType: source
+  dockerImageTag: 1.1.0
+  dockerRepository: etiennecalliesouihelp/airbyte-source-aircall
+  githubIssueLabel: source-aircall-custom
+  license: ELv2
+  name: Aircall
+  registryOverrides:
+    cloud:
+      enabled: true
+    oss:
+      enabled: true
+  releaseStage: alpha
+  documentationUrl: https://docs.airbyte.com/integrations/sources/aircall
+  ab_internal:
+    sl: 100
+    ql: 100
+  supportLevel: community
+  connectorBuildOptions:
+    baseImage: docker.io/airbyte/python-connector-base:4.0.2@sha256:9fdb1888c4264cf6fee473649ecb593f56f58e5d0096a87ee0b231777e2e3e73
+  externalDocumentationUrls:
+    - title: API documentation
+      url: https://developer.aircall.io/api-references/
+      type: api_reference
+    - title: Authentication
+      url: https://developer.aircall.io/api-references/#authentication
+      type: authentication_guide
+    - title: Rate limits
+      url: https://developer.aircall.io/api-references/#rate-limit
+      type: rate_limits
+metadataSpecVersion: "1.0"
+

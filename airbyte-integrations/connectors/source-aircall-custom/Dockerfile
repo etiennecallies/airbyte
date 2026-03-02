@@ -1,38 +1,15 @@
-FROM python:3.9.11-alpine3.15 as base
+FROM docker.io/airbyte/python-connector-base:4.0.2@sha256:9fdb1888c4264cf6fee473649ecb593f56f58e5d0096a87ee0b231777e2e3e73
 
-# build and load all requirements
-FROM base as builder
 WORKDIR /airbyte/integration_code
 
-# upgrade pip to the latest version
-RUN apk --no-cache upgrade \
-    && pip install --upgrade pip \
-    && apk --no-cache add tzdata build-base
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --only main --no-root
 
-
-COPY setup.py ./
-# install necessary packages to a temporary folder
-RUN pip install --prefix=/install .
-
-# build a clean environment
-FROM base
-WORKDIR /airbyte/integration_code
-
-# copy all loaded and built libraries to a pure basic image
-COPY --from=builder /install /usr/local
-# add default timezone settings
-COPY --from=builder /usr/share/zoneinfo/Etc/UTC /etc/localtime
-RUN echo "Etc/UTC" > /etc/timezone
-
-# bash is installed for more convenient debugging.
-RUN apk --no-cache add bash
-
-# copy payload code only
-COPY main.py ./
 COPY source_aircall ./source_aircall
+RUN poetry install --only main
 
-ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
-ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
+ENV AIRBYTE_ENTRYPOINT "poetry run source-aircall-custom"
+ENTRYPOINT ["poetry", "run", "source-aircall-custom"]
 
-LABEL io.airbyte.version=0.1.0
-LABEL io.airbyte.name=airbyte/source-aircall
+LABEL io.airbyte.version=1.1.0
+LABEL io.airbyte.name=etiennecalliesouihelp/airbyte-source-aircall

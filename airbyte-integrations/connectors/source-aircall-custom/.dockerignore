@@ -1,6 +1,6 @@
 *
 !Dockerfile
-!main.py
+!pyproject.toml
+!poetry.lock
 !source_aircall
-!setup.py
 !secrets
