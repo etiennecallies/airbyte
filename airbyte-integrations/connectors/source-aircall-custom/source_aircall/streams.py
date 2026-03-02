@@ -122,6 +122,9 @@ class AircallIncrementalStream(AircallStream, IncrementalMixin):
 
     @state.setter
     def state(self, value: Mapping[str, Any]):
+        if not value:
+            return
+
         self._cursor_value = value[self.cursor_field]
         # We start fetching API from the most recent date of:
         # - the latest state date (the latest record creation date)

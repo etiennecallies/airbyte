@@ -11,5 +11,4 @@ RUN poetry install --only main
 ENV AIRBYTE_ENTRYPOINT="cd /airbyte/integration_code && poetry run source-aircall-custom"
 ENTRYPOINT ["poetry", "run", "source-aircall-custom"]
 
-LABEL io.airbyte.version=1.2.2
 LABEL io.airbyte.name=etiennecalliesouihelp/airbyte-source-aircall
