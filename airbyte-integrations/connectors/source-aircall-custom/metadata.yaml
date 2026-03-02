@@ -1,7 +1,7 @@
 data:
   connectorSubtype: api
   connectorType: source
-  dockerImageTag: 1.1.0
+  dockerImageTag: 1.2.2
   dockerRepository: etiennecalliesouihelp/airbyte-source-aircall
   githubIssueLabel: source-aircall-custom
   license: ELv2
