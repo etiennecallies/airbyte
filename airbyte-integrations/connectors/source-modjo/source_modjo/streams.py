@@ -35,7 +35,7 @@ class Calls(HttpStream, IncrementalMixin):
         decoded_response = response.json()
         pagination = decoded_response["pagination"]
 
-        if pagination["page"] == pagination["lastPage"]:
+        if not pagination.get("nextPage"):
             return None
 
         return {"page": pagination["nextPage"]}
